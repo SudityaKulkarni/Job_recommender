@@ -26,5 +26,5 @@ class UserResponse(UserBase):
 
 #this is the login schema
 class UserLogin(BaseModel):
-    username_or_email:str
+    email: EmailStr
     password: str

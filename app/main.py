@@ -7,7 +7,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 from .database import engine, get_db
-from .routes import users
+from .routes import users,auth
 from . import models
 
 models.Base.metadata.create_all(bind = engine)  # Create the database tables (very important step)
@@ -15,6 +15,7 @@ models.Base.metadata.create_all(bind = engine)  # Create the database tables (ve
 app = FastAPI() # Create the FastAPI app
 
 app.include_router(users.router)  # include the user router
+app.include_router(auth.router) #includes the auth router
 
 #checking the database connectivity
 while True:   
@@ -27,4 +28,4 @@ while True:
     except Exception as error:
         print("Couldn't connect to database.. connection failed")
         print("error: ",error)
-        time.sleep(2)
+        time.sleep(2) #wait for 2 seconds before trying to connect again
