@@ -28,3 +28,7 @@ class UserResponse(UserBase):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+#schema for token
+class TokenData(BaseModel):
+    id: Optional[str] = None
