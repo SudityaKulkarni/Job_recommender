@@ -32,3 +32,24 @@ class UserLogin(BaseModel):
 #schema for token
 class TokenData(BaseModel):
     id: Optional[str] = None
+
+
+#schema for job roles
+class JobRoles(BaseModel):
+    roles: List[str]
+
+#schema for job request
+class JobRequest(BaseModel):
+    user_id : int
+    custom_skills: Optional[str] = None
+
+
+#schema for job links
+class JobLink(BaseModel):
+    title: str
+    company: str
+    url: str
+
+class JobLinksResponse(BaseModel):
+    job_role: str
+    jobs: List[JobLink]

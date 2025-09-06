@@ -7,7 +7,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from sqlalchemy.orm import Session
 from .database import engine, get_db
-from .routes import users,auth
+from .routes import users,auth,jobApi
 from . import models
 
 models.Base.metadata.create_all(bind = engine)  # Create the database tables (very important step)
@@ -16,6 +16,7 @@ app = FastAPI() # Create the FastAPI app
 
 app.include_router(users.router)  # include the user router
 app.include_router(auth.router) #includes the auth router
+app.include_router(jobApi.router) #includes the job api router
 
 #checking the database connectivity
 while True:   

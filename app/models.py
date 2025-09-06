@@ -17,3 +17,12 @@ class User(Base):
     skills = Column(String, nullable=False)              # store as comma-separated
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),nullable = False ,server_default= text('now()'))
+
+
+class userJobRoles(Base):
+    __tablename__ = "user_job_roles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    job_role = Column(String, nullable=False)
+    
