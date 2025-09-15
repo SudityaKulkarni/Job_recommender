@@ -43,8 +43,9 @@ async def generate_job_roles(request:schemas.JobRequest ,db: Session = Depends(g
 
 @router.get("/job-links",response_model= List[schemas.JobLinksResponse])
 async def get_job_links(user_id:int, db: Session = Depends(get_db)):
+    
     get_user = db.query(models.userJobRoles).filter(models.userJobRoles.user_id == user_id).first()
-
+    
     if not get_user:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "No job roles found for this user -> generate job roles first")
     

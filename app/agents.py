@@ -46,7 +46,7 @@ async def get_job_roles(skills: List[str]) -> JobRoles:
     return JobRoles.parse_raw(response_text)
 
 
-#function to get job links from adzuna api
+#function to get job links from adzuna api      
 async def get_job_links(role:str, location: str = "India"):
     url = "https://api.adzuna.com/v1/api/jobs/in/search/1"
     params = {
@@ -60,7 +60,23 @@ async def get_job_links(role:str, location: str = "India"):
 
     async with httpx.AsyncClient() as client:
         response = await client.get(url, params=params)
-        data = response.json()
+        print(f"ADZUNA API Status: {response.status_code}")  # Debug
+        print(f"ADZUNA API Response: {response.text[:200]}")  # Debug - first 200 chars
+        
+        # Check if response is successful and has content
+        if response.status_code != 200:
+            print(f"ADZUNA API Error: {response.status_code} - {response.text}")
+            return []  # Return empty list on error
+            
+        if not response.text.strip():
+            print("ADZUNA API returned empty response")
+            return []
+            
+        try:
+            data = response.json()
+        except Exception as e:
+            print(f"Failed to parse JSON: {e}")
+            return []
 
     return [
         {

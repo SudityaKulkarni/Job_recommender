@@ -48,6 +48,7 @@ class JobRequest(BaseModel):
 class JobLink(BaseModel):
     title: str
     company: str
+    location: str
     url: str
 
 class JobLinksResponse(BaseModel):
