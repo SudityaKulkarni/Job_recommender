@@ -2,13 +2,16 @@ from .. import agents
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from ..database import get_db
-from .. import schemas, models
+from .. import schemas, models,oauth2
 from typing import List
 
 router = APIRouter(prefix = "/jobs", tags=["Jobs"])
 
 @router.post("/generate-job-roles", response_model= schemas.JobRoles)
-async def generate_job_roles(request:schemas.JobRequest ,db: Session = Depends(get_db)):
+async def generate_job_roles(request:schemas.JobRequest ,db: Session = Depends(get_db),current_user: int = Depends(oauth2.get_current_user)):
+    if(request.user_id != current_user.id):
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail="Not authorized to view this user")
+    
     get_user = db.query(models.User).filter(models.User.id == request.user_id).first()
 
     if not get_user:
@@ -42,7 +45,9 @@ async def generate_job_roles(request:schemas.JobRequest ,db: Session = Depends(g
 
 
 @router.get("/job-links",response_model= List[schemas.JobLinksResponse])
-async def get_job_links(user_id:int, db: Session = Depends(get_db)):
+async def get_job_links(user_id:int, db: Session = Depends(get_db),current_user: int = Depends(oauth2.get_current_user)):
+    if(user_id != current_user.id):
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail="Not authorized to view this user")
     
     get_user = db.query(models.userJobRoles).filter(models.userJobRoles.user_id == user_id).first()
     
